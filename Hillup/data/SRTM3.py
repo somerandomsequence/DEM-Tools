@@ -55,7 +55,7 @@ from sys import stderr
 from math import floor, log
 from os import unlink, close, write, chmod, makedirs
 from os.path import basename, exists, isdir, join
-from httplib import HTTPConnection
+from httplib import HTTPConnection, HTTPSConnection
 from urlparse import urlparse
 from tempfile import mkstemp
 from zipfile import ZipFile
@@ -174,7 +174,7 @@ def datasource(lat, lon, source_dir):
         # we're probably outside a known region
         return None
 
-    fmt = 'http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/%s/%s.hgt.zip'
+    fmt = 'https://dds.cr.usgs.gov/srtm/version2_1/SRTM3/%s/%s.hgt.zip'
     url = fmt % (reg, filename(lat, lon))
     
     #
@@ -208,7 +208,7 @@ def datasource(lat, lon, source_dir):
     #
     print >> stderr, 'Retrieving', url, 'in DEM.SRTM3.datasource().'
     
-    conn = HTTPConnection(host, 80)
+    conn = HTTPSConnection(host)
     conn.request('GET', path)
     resp = conn.getresponse()
     

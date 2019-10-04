@@ -4,7 +4,7 @@ from sys import stderr
 from math import floor, log
 from os import unlink, close, write, chmod, makedirs
 from os.path import basename, exists, isdir, join
-from httplib import HTTPConnection
+from httplib import HTTPConnection, HTTPSConnection
 from urlparse import urlparse
 from tempfile import mkstemp
 from zipfile import ZipFile
@@ -80,7 +80,7 @@ def datasource(lat, lon, source_dir):
         return None
 
     # FIXME for western / southern hemispheres
-    fmt = 'http://dds.cr.usgs.gov/srtm/version2_1/SRTM1/Region_%02d/N%02dW%03d.hgt.zip'
+    fmt = 'https://dds.cr.usgs.gov/srtm/version2_1/SRTM1/Region_%02d/N%02dW%03d.hgt.zip'
     url = fmt % (reg, abs(lat), abs(lon))
     
     #
@@ -114,7 +114,7 @@ def datasource(lat, lon, source_dir):
     #
     print >> stderr, 'Retrieving', url, 'in DEM.SRTM1.datasource().'
     
-    conn = HTTPConnection(host, 80)
+    conn = HTTPSConnection(host)
     conn.request('GET', path)
     resp = conn.getresponse()
     
